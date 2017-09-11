@@ -10,56 +10,64 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Import Model
+use App\Task;
+
+// Object Request
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Basic Route
-/*
-Route::get('users/{id}', function($id){
-  echo $id;
-});
-*/
+// Task App Route
+Route::get('/task', function(){
+  $tasks = Task::orderBy('created_at', 'asc')->get();
 
-// Group Route
-Route::group(['prefix' => 'account'], function(){
-  Route::get('change-password', function(){
-    echo 'Change password';
-  });
-
-  Route::get('profile', function(){
-    echo 'Profile';
-  });
-
-  Route::post('profile', function(){
-    //
-  });
+  return view('tasks.index',[
+    'tasks' => $tasks,
+  ]);
 });
 
-// Naming Route
-Route::get('/redirect', function(){
-  return redirect()->route('landing');
+Route::post('/task', function(Request $request){
+  // Debugging return purpose
+  // return 'Works';
+
+  // Debugging return $request
+  // dd($request);
+
+  // Validation
+  $validator = Validator::make($request->all(), [
+    'name' => 'required|max:255',
+  ]);
+
+  if($validator->fails()){
+    return redirect('/task')
+      ->withInput()
+      ->withErrors($validator);
+  }
+
+  // After validation, create Task
+
+  // Method 1 - And more common method.
+  // $task = new Task;
+  // $task->name = $request->name;
+  // $task->save();
+  
+
+  // Method 2 - In this case we need to add fillable element on Model
+  Task::create([
+    'name' => $request->name,
+  ]);
+
+  // Redirect to main page
+  return redirect('/task');
 });
 
-Route::get('/landing/page', function(){
-  echo 'Landing';
-})->name('landing');
+Route::delete('/task/{task}', function(Task $task){
+  // Debugging return
+  // return 'Works';
 
-// Hook Up Route and Controller
-Route::get('/home',[
-  // as mean route name.
-  'as' => 'home',
-  // uses controller and define as ControllerName@functionInController
-  'uses' => 'HomeController@index',
-]);
-/*
-Route::post('/home',[
-  'uses' => 'HomeController@create'
-]);
-*/
-
-// Passing data from router to controller and view
-Route::get('/users/{username}',[
-  'uses' => 'HomeController@user'
-]);
+  $task->delete();
+  return redirect('/task');
+});
