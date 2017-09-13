@@ -71,3 +71,14 @@ Route::delete('/task/{task}', function(Task $task){
   $task->delete();
   return redirect('/task');
 });
+
+// Quotes App Route
+Route::get('/quote', [
+  'uses' => 'QuoteController@index',
+  'as' => 'indexQuote'
+]);
+
+Route::post('/quote',[
+  'uses' => 'QuoteController@postQuote',
+  'as' => 'postQuote'
+]);

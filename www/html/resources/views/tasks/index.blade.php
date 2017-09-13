@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('title')
+	Tasks To Do
+@endsection
+
+@section('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+@endsection
+
 @section('content')
 <div>
 	<div>
