@@ -53,7 +53,7 @@ Route::post('/task', function(Request $request){
   // $task = new Task;
   // $task->name = $request->name;
   // $task->save();
-  
+
 
   // Method 2 - In this case we need to add fillable element on Model
   Task::create([
